@@ -11,16 +11,11 @@ import (
 
 const (
 	constBanner = `
- ██ ▄█▀ ██▓     ██▓          ██▓    ▄▄▄      
- ██▄█▒ ▓██▒    ▓██▒         ▓██▒   ▒████▄    
-▓███▄░ ▒██░    ▒██░         ▒██░   ▒██  ▀█▄  
-▓██ █▄ ▒██░    ▒██░         ▒██░   ░██▄▄▄▄██ 
-▒██▒ █▄░██████▒░██████▒ ██▓ ░██████▒▓█   ▓██▒
-▒ ▒▒ ▓▒░ ▒░▓  ░░ ▒░▓  ░ ▒▓▒ ░ ▒░▓  ░▒▒   ▓▒█░
-░ ░▒ ▒░░ ░ ▒  ░░ ░ ▒  ░ ░▒  ░ ░ ▒  ░ ▒   ▒▒ ░
-░ ░░ ░   ░ ░     ░ ░    ░     ░ ░    ░   ▒   
-░  ░       ░  ░    ░  ░  ░      ░  ░     ░  ░
-                         ░                   
+██   ██ ██      ██         ██       █████  
+██  ██  ██      ██         ██      ██   ██ 
+█████   ██      ██         ██      ███████ 
+██  ██  ██      ██         ██      ██   ██ 
+██   ██ ███████ ███████ ██ ███████ ██   ██ 
 `
 	baseTemplate = `<!DOCTYPE html>
 <html lang="en">
@@ -34,7 +29,7 @@ const (
 </head>
     <div class="fixed-header">
 		<div class="container">
-			<div class="ascii-art">{{.Banner}}</div>
+			<div class="ascii-art"><pre>{{.Banner}}</pre></div>
 		</div>
 		<div class="container">
             {{.NavBar}}

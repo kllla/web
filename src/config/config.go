@@ -74,13 +74,6 @@ func (config *Conf) ClientFromConfig(ctx context.Context) *firestore.Client {
 	var app = &firebase.App{}
 	var err error
 	if ucred {
-		type Config struct {
-			AuthOverride     *map[string]interface{} `json:"databaseAuthVariableOverride"`
-			DatabaseURL      string                  `json:"databaseURL"`
-			ProjectID        string                  `json:"projectId"`
-			ServiceAccountID string                  `json:"serviceAccountId"`
-			StorageBucket    string                  `json:"storageBucket"`
-		}
 		app, err = firebase.NewApp(ctx, &firebase.Config{
 			AuthOverride:     nil,
 			DatabaseURL:      "",
@@ -89,9 +82,7 @@ func (config *Conf) ClientFromConfig(ctx context.Context) *firestore.Client {
 			StorageBucket:    "bucket",
 		}, config.Options)
 	} else {
-		app, err = firebase.NewApp(ctx, &firebase.Config{
-			ProjectID: projectID,
-		}, config.Options)
+		app, err = firebase.NewApp(ctx, nil, config.Options)
 	}
 	if err != nil {
 		log.Fatalln(err)
