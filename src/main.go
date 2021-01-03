@@ -118,40 +118,19 @@ func shortenHandler(w http.ResponseWriter, r *http.Request) {
 func postsHandler(w http.ResponseWriter, r *http.Request) {
 	isAuthForPosting := clientSvc.AuthenticationCheck(w, r)
 	pathID := strings.TrimPrefix(r.URL.Path, "/post/")
+	var postByID []*post.Post
 	pathIDok := pathID != ""
-	postByID := postSvc.GetPostByID(pathID)
-	if isAuthForPosting {
-		author := clientSvc.GetSessionUsername(w, r)
-		banner := ascii.RenderString(author)
-		r.ParseForm()
-		switch r.Method {
-		case http.MethodGet:
+	if pathIDok {
+		postByID = postSvc.GetPostByID(pathID)
+	}
+	author := clientSvc.GetSessionUsername(w, r)
+	banner := ascii.RenderString(author)
+	switch r.Method {
+	case http.MethodGet:
+		if isAuthForPosting && pathIDok {
 			action := postSvc.GetActionFromFormData(w, r)
-			if pathIDok {
-				if action == "delete" {
-					if postSvc.DeletePost(pathID) {
-						fmt.Printf("is success")
-					} else {
-						fmt.Printf("is failure")
-					}
-				} else if len(postByID) == 1 && postByID[0].Public {
-					renderer.RenderPageWithOptions(w, render.Posts, &render.PageRenderOptions{
-						Banner:        "",
-						AuthedNavBar:  isAuthForPosting,
-						AuthedContent: false,
-						Indata:        post.RenderWrap(postByID),
-					})
-					return
-				}
-			}
-			if len(postByID) == 1 && postByID[0].Public {
-				renderer.RenderPageWithOptions(w, render.Posts, &render.PageRenderOptions{
-					Banner:        "",
-					AuthedNavBar:  isAuthForPosting,
-					AuthedContent: false,
-					Indata:        post.RenderWrap(postByID),
-				})
-				return
+			if action == "delete" {
+				postSvc.DeletePost(postByID[0].ID)
 			}
 			userPosts := postSvc.GetAllPostsForUsername(author)
 			var intPosts []interface{}
@@ -163,7 +142,21 @@ func postsHandler(w http.ResponseWriter, r *http.Request) {
 				Indata:        intPosts,
 			})
 			return
-		case http.MethodPost:
+		} else {
+			if pathIDok && (len(postByID) == 1 && postByID[0].Public) {
+				renderer.RenderPageWithOptions(w, render.Posts, &render.PageRenderOptions{
+					Banner:        "",
+					AuthedNavBar:  isAuthForPosting,
+					AuthedContent: false,
+					Indata:        post.RenderWrap(postByID),
+				})
+				return
+			}
+			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+			return
+		}
+	case http.MethodPost:
+		if isAuthForPosting {
 			formDataPost := postSvc.GetPostFromFormData(w, r, author)
 			postSvc.CreatePost(formDataPost)
 			userPosts := postSvc.GetAllPostsForUsername(author)
@@ -173,21 +166,6 @@ func postsHandler(w http.ResponseWriter, r *http.Request) {
 				AuthedContent: true,
 				Indata:        post.RenderWrap(userPosts),
 			})
-			return
-		case http.MethodDelete:
-			if pathIDok {
-				fmt.Printf("Deleteing %s\n", pathID)
-				if postSvc.DeletePost(pathID) {
-					fmt.Printf("Delete was success %s\n", pathID)
-				}
-				userPosts := postSvc.GetAllPostsForUsername(author)
-				renderer.RenderPageWithOptions(w, render.Posts, &render.PageRenderOptions{
-					Banner:        banner,
-					AuthedNavBar:  true,
-					AuthedContent: true,
-					Indata:        post.RenderWrap(userPosts),
-				})
-			}
 			return
 		}
 	}
