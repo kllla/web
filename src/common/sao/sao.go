@@ -33,7 +33,7 @@ func NewSao() Sao {
 }
 
 func (sao *saoImpl) GetStaticFiles(object string) []byte {
-	var bucket = os.Getenv("STORAGE_BUCKET")
+	var bucket = os.Getenv("BUCKET_NAME")
 	rc, err := sao.client.Bucket(bucket).Object(object).NewReader(sao.ctx)
 	if err != nil {
 		log.Fatalln(err)

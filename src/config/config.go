@@ -4,6 +4,7 @@ import (
 	"cloud.google.com/go/firestore"
 	"context"
 	firebase "firebase.google.com/go"
+	"fmt"
 	"google.golang.org/api/option"
 	"log"
 	"os"
@@ -64,9 +65,9 @@ func (conf *TestConf) ClientFromConfig(ctx context.Context) *firestore.Client {
 }
 
 func (config *Conf) ClientFromConfig(ctx context.Context) *firestore.Client {
-
-	projectID := os.Getenv("PROJECT_ID")
+	projectID := os.Getenv("BUCKET_NAME")
 	useCreds := os.Getenv("USE_CREDS")
+	fmt.Printf("Bucket Name %s : %t", projectID, useCreds )
 	ucred := false
 	if useCreds != "" {
 		ucred, _ = strconv.ParseBool(useCreds)
