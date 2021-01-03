@@ -1,7 +1,6 @@
 package ascii
 
 import (
-	"fmt"
 	"github.com/kllla/web/src/common/sao"
 	"github.com/mbndr/figlet4go"
 )
@@ -21,9 +20,6 @@ func initASCII() (*figlet4go.AsciiRender, *figlet4go.RenderOptions) {
 
 // RenderString returns the string in the format defined in initASCII
 func RenderString(text string) string {
-	fmt.Printf("Rendering Banner %s\n", text)
-	renderStr, err := ascii.RenderOpts(text, options)
-	fmt.Print(ascii.RenderOpts("TEST", options))
-	fmt.Printf("\n %s \n %s \n", renderStr, err)
+	renderStr, _ := ascii.RenderOpts(text, options)
 	return renderStr
 }
