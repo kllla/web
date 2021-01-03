@@ -3,7 +3,6 @@ package sao
 import (
 	"cloud.google.com/go/storage"
 	"context"
-	"github.com/kllla/web/src/config"
 	"io/ioutil"
 	"log"
 	"os"
@@ -25,7 +24,7 @@ type Config struct {
 
 func NewSao() Sao {
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx, config.DefaultConfig.GetOptions())
+	client, err := storage.NewClient(ctx)
 	if err != nil {
 		log.Fatalln(err)
 	}
