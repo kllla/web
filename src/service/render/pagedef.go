@@ -316,7 +316,7 @@ func printInvites(invites []*invite.Invite, authed bool, short bool) string {
 	for pos, invite := range invites {
 		htmlStr += fmt.Sprintf("<div class=\"post-container\">"+
 			"<h1>invite %d</h1>"+
-			"<a href=\"http://www.kll.la/register/%s\">http://www.kll.la/register/%s</a>" +
+			"<a href=\"https://www.kll.la/register/%s\">https://www.kll.la/register/%s</a>" +
 			"<div class=\"post-container-author\">%s</div> "+
 			"<div class=\"post-container-date\">%s</div>"+
 			"</div>", pos+1, invite.InviteID,invite.InviteID,invite.CreatedBy, invite.ExpiryTime.Format("2006/01/02"))
@@ -330,7 +330,7 @@ func printURLS(urls []*shorten.ShortenedURL, authed bool, short bool) string {
 	for _, url := range urls {
 		str += fmt.Sprintf("<div class=\"post-container\">"+
 			"<p><a href=\"%s\">%s</p></a>"+
-			"<p><a href=\"http://%s\">%s</p></a>"+
+			"<p><a href=\"https://%s\">%s</p></a>"+
 			"<div class=\"post-container-author\">%s</div> "+
 			"<div class=\"post-container-date\">%s</div>"+
 			"</div>", url.LongUrl, url.LongUrl, url.ShortenedURL, url.ShortenedURL, url.CreatedBy, url.ExpiryTime.Format("2006/01/02"))
