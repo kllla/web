@@ -20,8 +20,6 @@ var shortenSvc = shorten.NewService()
 var postSvc = post.NewService()
 var inviteSvc = invite.NewService()
 
-
-
 func main() {
 	log.Printf("Listening on port %s", "8080")
 
@@ -122,21 +120,9 @@ func postsHandler(w http.ResponseWriter, r *http.Request) {
 	pathID := strings.TrimPrefix(r.URL.Path, "/post/")
 	pathIDok := pathID != ""
 	postByID := postSvc.GetPostByID(pathID)
-	fmt.Printf("PSOT BY ID %s", postByID)
-	if len(postByID) == 1 && postByID[0].Public {
-		fmt.Printf("PSOT BY ID %s", postByID)
-		renderer.RenderPageWithOptions(w, render.Posts, &render.PageRenderOptions{
-			Banner:        "",
-			AuthedNavBar:  isAuthForPosting,
-			AuthedContent: false,
-			Indata:        post.RenderWrap(postByID),
-		})
-		return
-	}
 	if isAuthForPosting {
 		author := clientSvc.GetSessionUsername(w, r)
 		banner := ascii.RenderString(author)
-		fmt.Printf("\n%s -- PathID = %s = %t\n", r.Method, pathID, pathIDok)
 		r.ParseForm()
 		switch r.Method {
 		case http.MethodGet:
@@ -148,16 +134,24 @@ func postsHandler(w http.ResponseWriter, r *http.Request) {
 					} else {
 						fmt.Printf("is failure")
 					}
-				} else {
-					posts := postSvc.GetAllPostsForUsername(author)
+				} else if len(postByID) == 1 && postByID[0].Public {
 					renderer.RenderPageWithOptions(w, render.Posts, &render.PageRenderOptions{
-						Banner:        banner,
-						AuthedNavBar:  true,
-						AuthedContent: true,
-						Indata:        post.RenderWrap(posts),
+						Banner:        "",
+						AuthedNavBar:  isAuthForPosting,
+						AuthedContent: false,
+						Indata:        post.RenderWrap(postByID),
 					})
 					return
 				}
+			}
+			if len(postByID) == 1 && postByID[0].Public {
+				renderer.RenderPageWithOptions(w, render.Posts, &render.PageRenderOptions{
+					Banner:        "",
+					AuthedNavBar:  isAuthForPosting,
+					AuthedContent: false,
+					Indata:        post.RenderWrap(postByID),
+				})
+				return
 			}
 			userPosts := postSvc.GetAllPostsForUsername(author)
 			var intPosts []interface{}
