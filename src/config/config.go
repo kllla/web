@@ -4,16 +4,12 @@ import (
 	"cloud.google.com/go/firestore"
 	"context"
 	firebase "firebase.google.com/go"
-	"fmt"
 	"google.golang.org/api/option"
 	"log"
 	"os"
-	"strconv"
 )
 
-const (
-
-)
+const ()
 
 var (
 	Options       = credOption()
@@ -21,8 +17,11 @@ var (
 	TestConfig    = testConfig()
 )
 
-func credOption()option.ClientOption {
+func credOption() option.ClientOption {
 	credLocation := os.Getenv("CREDS_LOCATION")
+	log.Println("CRED LOCATION", credLocation)
+	w, _ := os.Getwd()
+	log.Println("PWD = ", w)
 	return option.WithCredentialsFile(credLocation)
 }
 
@@ -64,26 +63,7 @@ func (conf *TestConf) ClientFromConfig(ctx context.Context) *firestore.Client {
 }
 
 func (config *Conf) ClientFromConfig(ctx context.Context) *firestore.Client {
-	projectID := os.Getenv("PROJECT_ID")
-	useCreds := os.Getenv("USE_CREDS")
-	fmt.Printf("Bucket Name %s : %t", projectID, useCreds )
-	ucred := false
-	if useCreds != "" {
-		ucred, _ = strconv.ParseBool(useCreds)
-	}
-	var app = &firebase.App{}
-	var err error
-	if ucred {
-		app, err = firebase.NewApp(ctx, &firebase.Config{
-			AuthOverride:     nil,
-			DatabaseURL:      "",
-			ProjectID:        "infra-person",
-			ServiceAccountID: "105637127689182478722",
-			StorageBucket:    "bucket",
-		}, config.Options)
-	} else {
-		app, err = firebase.NewApp(ctx, nil, config.Options)
-	}
+	app, err := firebase.NewApp(ctx, nil, config.Options)
 	if err != nil {
 		log.Fatalln(err)
 	}
