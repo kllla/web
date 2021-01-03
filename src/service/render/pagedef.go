@@ -25,8 +25,8 @@ const (
 	baseTemplate = `<!DOCTYPE html>
 <html lang="en">
 <constBanner>
-    <link rel="stylesheet" type="text/css" href="https://storage.googleapis.com/infra-prime.appspot.com/static/kllpw.css">
-    <script src="https://storage.googleapis.com/infra-prime.appspot.com/static/kllpw.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://storage.googleapis.com/infra-person.appspot.com/kllpw.css">
+    <script src="https://storage.googleapis.com/infra-person.appspot.com/kllpw.js"></script>
 </constBanner>
 <head>
     <meta charset="UTF-8">

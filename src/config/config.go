@@ -75,11 +75,17 @@ func (config *Conf) ClientFromConfig(ctx context.Context) *firestore.Client {
 	var app = &firebase.App{}
 	var err error
 	if ucred {
-		app, err = firebase.NewApp(ctx, nil, config.Options)
+		app, err = firebase.NewApp(ctx, &firebase.Config{
+			AuthOverride:     nil,
+			DatabaseURL:      "",
+			ProjectID:        "infra-prime",
+			ServiceAccountID: "108708042762631808425",
+			StorageBucket:    "infra-prime.appspot.com",
+		})
 	} else {
 		app, err = firebase.NewApp(ctx, &firebase.Config{
 			ProjectID: projectID,
-		}, nil)
+		}, config.Options)
 	}
 	if err != nil {
 		log.Fatalln(err)
