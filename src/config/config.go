@@ -30,7 +30,7 @@ func testConfig() Config {
 }
 
 func defaultConfig() Config {
-	return &Conf{Options: Options}
+	return &Conf{Options: nil}
 }
 
 type Config interface {
@@ -63,7 +63,13 @@ func (conf *TestConf) ClientFromConfig(ctx context.Context) *firestore.Client {
 }
 
 func (config *Conf) ClientFromConfig(ctx context.Context) *firestore.Client {
-	app, err := firebase.NewApp(ctx, nil, config.Options)
+	app, err := firebase.NewApp(ctx, &firebase.Config{
+		AuthOverride:     nil,
+		DatabaseURL:      "",
+		ProjectID:        "infra-person",
+		ServiceAccountID: "105637127689182478722",
+		StorageBucket:    "infra-person.appspot.com",
+	})
 	if err != nil {
 		log.Fatalln(err)
 	}
