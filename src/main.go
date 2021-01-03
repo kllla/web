@@ -270,7 +270,6 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	inviteID := strings.TrimPrefix(r.URL.Path, "/register/")
 	switch r.Method {
 	case http.MethodGet:
-		fmt.Printf("INVITED ID USED TO GTE REGISTER %s", inviteID)
 		if inviteID == "" {
 			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 			return
@@ -288,7 +287,6 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	case http.MethodPost:
-		fmt.Printf("INVITED ID USED TO POST REGISTER %s", inviteID)
 		if clientSvc.CreateCredentials(w, r) {
 			r.ParseForm()
 			inviteID := r.FormValue("invite")

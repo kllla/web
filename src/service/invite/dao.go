@@ -111,7 +111,7 @@ func (dao *Dao) GetInviteForID(inviteID string) []*Invite {
 func (dao *Dao) DeleteInviteByID(id string) error {
 	// GetCredentialsForUsername gets NoPassCredentials from the credentials bucket
 	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(bucket).Where("ID", "==", id).Documents(ctx)
+	iter := dao.client.Collection(bucket).Where("InviteID", "==", id).Documents(ctx)
 	for {
 		doc, err := iter.Next()
 		if err != nil {

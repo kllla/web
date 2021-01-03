@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const domain = "www.kll.la/"
+const domain = "kll.la/"
 
 type Service interface {
 	CreatedShortenedURL(w http.ResponseWriter, r *http.Request, createdBy string)  (*ShortenedURL, error)
