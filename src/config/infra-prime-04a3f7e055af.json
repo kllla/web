@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "infra-prime",
+  "private_key_id": "04a3f7e055af9e986e83295dba6425995e82009b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDd1d3Cq/RFTTVY\nWX894+DT0Y9GowMbLNmJ3oPToaeta+Xp3Jth739LnkDwupb37GM9+FOx6A0xxKf1\nLGr2hJfWVj/tN1AZ6uR/iNtwv5Y3oAvxyHTzBzYuXPStHQB8lqIlfLRaAUgBfeEw\nt4OCLJ8NHWO9fJbZ2/5+FzNIK/bRhmlfprf5OsQObh1dAnx6RB81Gyw/kCSR4gQj\n8lm72bYAJZ/P+ysGMTVtmDHY2iRU5VaDF0UjXebs4QPohtWnWGFie7bG5A5FrqOi\niU9mFEF5j0bgsb6H2D6aeYERk76oTQqWinbivbSqMsmlioYVpG8FduuNCXY9yy9t\nEycJlds9AgMBAAECggEAF+7PXoXLtEBYrX/2VNiFdITK1t2WY7Oqgo/RnB74JqMZ\n6mmlD+NVUfSwX+hZikTkDhcA/JQi/EgRsMdKgO8cLIEgo3iQuUMYxNOgjSD2VWj8\ncOjmCSQxib34ncafu1FLDA1QrdcujA6nIWjjFMO4oyMVFCfhZH6yDat2Gma32bHZ\nteCRXY29pcdSfDUYLQFc5jhYJfUmrepeZ+Nm2BWLGpRGCaXh/igP3NMAECjXbDtq\nt70cnXFF0eB9hzl2Una6z98fyetZQO40jW4yX6zwgq/fMujpDyXirNgfQw0S9dQf\nlUh8ukrymdUXlmpH+bwdRsj9xscAlAKDzoSWV8KSkQKBgQDyeC9JVWadTEJPJwSA\nqkjOjNof4c0Avh6S6juk8CkeMcY7+CgX3zQNwYDG6Y3Ff2n1Tky9OkG67oFECH0l\nnC47yUVMx5SYDhKUXRCkI4guH4aBTk4JbK7+ufKykpyn7N0r5pkOhTkGPBJeMsfI\nk3FYxMgg51i5SnclJDtEB2pqVQKBgQDqNumHb+wmMlKcED5hsdaRkq8jx/bIsT0R\nO2LcbKtRbxAOhk7ObjABtqs3xNAo/eT/JxMvYhAWX27jK0H8zf3NO3B3P1ZMcU58\nvNYJBaLTJwqRcSXQJoOS3237qFsAQFS3zflWKUieQPOihL37qC1dp/PxvaYwZTac\nV2udjSJlSQKBgC4koRsbnYOh15yomDrELUbhl0Ep/5F8nOTonqEs8yZD4q3W9ApW\n99kGUjOIjupe7RM563C3fXrNmNwRoX9e0Y2fKAkMkkK9qtuBOoGCIZBlf3tsI323\nqTXgvUcuj5GFijGomMgiok+FbxluIIcTSCbUjCF25XOdsD7pPj4cCyxhAoGAfNBo\noPl/Ilfc+Dgb1lo8W3WNCgdtN0Rko8M/CvKKVapXJzZh1taXlMIw+lZTDBVJrMO5\nEJ40roeLA1qxHrTz1SQg6huBtNkJF6ZWdZZgUCBVHG7s1MFBisqwxNTSMg8WVqFY\nh5cWkOdSLsCIsgzMqEVx1djYMKAvex+HRP3KX6kCgYBJuPRWAn8iYR5vCXRTpOxH\n8MqZTh/CrUcF25hQ7HTxj7uyYOXg0Pnzr15+RNaMjVTrp69mpqoOOkjNln2nPzkz\nd16TSQ2eefh+GP1gSB3bm4JoLNoZ7pFJoI2bt2K1w+/+7Gf+4++331kYWQ5wO8LI\nEbFjb7j/qnfh2IYZet/EQw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "infra-prime@appspot.gserviceaccount.com",
+  "client_id": "104891362374113284047",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/infra-prime%40appspot.gserviceaccount.com"
+}

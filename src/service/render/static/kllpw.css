@@ -1,0 +1,196 @@
+.ascii-art {
+    font-size: 10pt;
+    font-family: "Courier New", Monospace;
+    white-space: pre;
+    color: teal;
+}
+
+body {
+    padding-top: 150px;
+    padding-bottom: 50px;
+    background-color: black;
+    text-color: white;
+}
+
+.body-container {
+    padding-top: 60px;
+    width: 80%;
+    color: white;
+    font-family: "Tahoma", "Verdana", "Segoe", sans-serif;
+    margin: 0 auto;
+}
+
+.post-container {
+    margin: 0 auto; /* Center the DIV horizontally */
+    border-bottom: 1px solid rgba(255, 255, 255, .25);
+}
+
+.post-short-container {
+    margin: 0 auto; /* Center the DIV horizontally */
+    border-bottom: 1px solid rgba(255, 255, 255, .25);
+}
+
+.post-container-form {
+    margin: 0 auto; /* Center the DIV horizontally */
+    border-bottom: 1px solid rgba(255, 255, 255, .25);
+}
+
+
+.post-container-form h1, label {
+    color: darkcyan;
+    display: block;
+    text-align: center;
+    text-decoration: underline;
+    margin: 0 auto;
+}
+
+.post-container p {
+    color:grey;
+}
+
+.post-container h1 {
+    color:darkcyan;
+    text-decoration: underline;
+}
+
+.post-container img {
+    border: 2px solid darkcyan;
+    display:block;
+    margin:auto;
+    width: 50%;
+}
+.post-container-author {
+    color: darkcyan;
+    text-align: right;
+    text-decoration: underline;
+}
+
+.post-container-date {
+    text-align: right;
+    color: cyan;
+}
+
+.login-container {
+}
+
+.fixed-header, .fixed-footer {
+    border-bottom: 1px solid rgba(255, 255, 255, .25);
+    width: 100%;
+    text-align: center;
+    position: fixed;
+    background: black;
+    padding: 10px 10px;
+    color: white;
+}
+
+.fixed-header {
+    top: 0;
+}
+
+.fixed-footer {
+    bottom: 0;
+}
+
+.nav-container {
+    width: 80%;
+    color: white;
+    font-family: "Lucida Console", "Courier New", monospace;
+    margin: 0 auto; /* Center the DIV horizontally */
+}
+.post-short-container a {
+    color: gray;
+    padding: 7px 25px;
+    display: inline-block;
+}
+
+.post-short-container a:hover {
+    color: darkcyan;
+    text-decoration: underline;
+}
+/* Some more styles to beutify this example */
+nav a {
+    color: white;
+    padding: 7px 25px;
+    display: inline-block;
+}
+
+nav a:hover {
+    color: darkcyan;
+    text-decoration: underline;
+}
+
+.login-container form {
+    font-family: "Lucida Console", "Courier New", monospace;
+    padding: 0px;
+    color: white;
+}
+
+.post-title {
+    color: white;
+    display:block;
+    margin:auto;
+    width: 50%;
+}
+
+.post-title h1 {
+    text-align: center;
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+.login-container h1 {
+    color: white;
+    text-align: center;
+    font-weight: 500;
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"],
+.post-container-form input[type="text"],
+.post-container-form input[type="checkbox"],
+.post-container-form textarea,
+.post-container-from input[type="password"] {
+    border: 0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid darkcyan;
+    padding: 14px 10px;
+    width: 200px;
+    outline: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 24px;
+    transition: 0.25s;
+}
+
+.login-container input[type="text"]:focus,
+.login-container input[type="password"]:focus,
+.post-container-form input[type="text"]:focus,
+.post-container-form input[type="checkbox"]:focus,
+.post-container-form textarea:focus
+.post-container-form input[type="password"]:focus {
+    width: 280px;
+    border-color: cyan;
+}
+
+.login-container input[type="submit"], .post-container-form input[type="submit"] {
+    border: 0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid darkcyan;
+    padding: 14px 25px;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25s;
+    font-size: 17px;
+}
+
+.login-container input[type="submit"]:hover, .post-container-form input[type="submit"]:hover {
+    background: cyan;
+    color: black
+}
