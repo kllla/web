@@ -23,7 +23,6 @@ var (
 
 func credOption()option.ClientOption {
 	credLocation := os.Getenv("CREDS_LOCATION")
-
 	return option.WithCredentialsFile(credLocation)
 }
 
@@ -65,7 +64,7 @@ func (conf *TestConf) ClientFromConfig(ctx context.Context) *firestore.Client {
 }
 
 func (config *Conf) ClientFromConfig(ctx context.Context) *firestore.Client {
-	projectID := os.Getenv("BUCKET_NAME")
+	projectID := os.Getenv("PROJECT_ID")
 	useCreds := os.Getenv("USE_CREDS")
 	fmt.Printf("Bucket Name %s : %t", projectID, useCreds )
 	ucred := false
@@ -75,13 +74,20 @@ func (config *Conf) ClientFromConfig(ctx context.Context) *firestore.Client {
 	var app = &firebase.App{}
 	var err error
 	if ucred {
+		type Config struct {
+			AuthOverride     *map[string]interface{} `json:"databaseAuthVariableOverride"`
+			DatabaseURL      string                  `json:"databaseURL"`
+			ProjectID        string                  `json:"projectId"`
+			ServiceAccountID string                  `json:"serviceAccountId"`
+			StorageBucket    string                  `json:"storageBucket"`
+		}
 		app, err = firebase.NewApp(ctx, &firebase.Config{
 			AuthOverride:     nil,
 			DatabaseURL:      "",
-			ProjectID:        "infra-prime",
-			ServiceAccountID: "108708042762631808425",
-			StorageBucket:    "infra-prime.appspot.com",
-		})
+			ProjectID:        "infra-person",
+			ServiceAccountID: "105637127689182478722",
+			StorageBucket:    "bucket",
+		}, config.Options)
 	} else {
 		app, err = firebase.NewApp(ctx, &firebase.Config{
 			ProjectID: projectID,
