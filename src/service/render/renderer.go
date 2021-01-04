@@ -12,10 +12,10 @@ type Renderer interface {
 }
 
 type PageRenderOptions struct {
-	Banner string
-	AuthedNavBar bool
+	Banner        string
+	AuthedNavBar  bool
 	AuthedContent bool
-	Indata []interface{}
+	Indata        []interface{}
 }
 
 type renderImpl struct {

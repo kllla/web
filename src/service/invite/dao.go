@@ -29,8 +29,7 @@ func NewDao(config config.Config) *Dao {
 // getPosts gets all posts from
 func (dao *Dao) GetInvites() []*Invite {
 	posts := make([]*Invite, 0)
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(bucket).OrderBy("Date", firestore.Desc).Documents(ctx)
+	iter := dao.client.Collection(bucket).OrderBy("Date", firestore.Desc).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -38,20 +37,18 @@ func (dao *Dao) GetInvites() []*Invite {
 		}
 		if err != nil {
 			log.Fatalf("Failed to iterate: %v", err)
-			cancel()
 		}
-		post := docToInvite(err, doc, cancel)
+		post := docToInvite(err, doc)
 		posts = append(posts, post)
 	}
 	return posts
 }
 
 //docToInvite Json marshals firestore doc to Post struct
-func docToInvite(err error, doc *firestore.DocumentSnapshot, cancel context.CancelFunc) *Invite {
+func docToInvite(err error, doc *firestore.DocumentSnapshot) *Invite {
 	md, err := json.Marshal(doc.Data())
 	if err != nil {
 		log.Fatalf("Failed to marshal data: %v", err)
-		cancel()
 	}
 	var post = &Invite{}
 	json.Unmarshal(md, post)
@@ -72,8 +69,7 @@ func (dao *Dao) Close() error {
 
 func (dao *Dao) GetInvitesCreatedBy(createdBy string) []*Invite {
 	Invites := make([]*Invite, 0)
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(bucket).Where("CreatedBy", "==", createdBy).Documents(ctx)
+	iter := dao.client.Collection(bucket).Where("CreatedBy", "==", createdBy).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -81,9 +77,8 @@ func (dao *Dao) GetInvitesCreatedBy(createdBy string) []*Invite {
 		}
 		if err != nil {
 			log.Fatalf("Failed to iterate: %v", err)
-			cancel()
 		}
-		invite := docToInvite(err, doc, cancel)
+		invite := docToInvite(err, doc)
 		Invites = append(Invites, invite)
 	}
 	return Invites
@@ -91,8 +86,7 @@ func (dao *Dao) GetInvitesCreatedBy(createdBy string) []*Invite {
 
 func (dao *Dao) GetInviteForID(inviteID string) []*Invite {
 	posts := make([]*Invite, 0)
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(bucket).Where("InviteID", "==", inviteID).Documents(ctx)
+	iter := dao.client.Collection(bucket).Where("InviteID", "==", inviteID).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -100,18 +94,15 @@ func (dao *Dao) GetInviteForID(inviteID string) []*Invite {
 		}
 		if err != nil {
 			log.Fatalf("Failed to iterate: %v", err)
-			cancel()
 		}
-		post := docToInvite(err, doc, cancel)
+		post := docToInvite(err, doc)
 		posts = append(posts, post)
 	}
 	return posts
 }
 
 func (dao *Dao) DeleteInviteByID(id string) error {
-	// GetCredentialsForUsername gets NoPassCredentials from the credentials bucket
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(bucket).Where("InviteID", "==", id).Documents(ctx)
+	iter := dao.client.Collection(bucket).Where("InviteID", "==", id).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err != nil {
@@ -120,10 +111,9 @@ func (dao *Dao) DeleteInviteByID(id string) error {
 			}
 			if err != nil {
 				log.Fatalf("Failed to iterate: %v", err)
-				cancel()
 			}
 		}
-		_, err = doc.Ref.Delete(ctx)
+		_, err = doc.Ref.Delete(dao.ctx)
 		return err
 	}
 	return fmt.Errorf("no invite found for username %s", id)

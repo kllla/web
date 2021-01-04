@@ -9,8 +9,6 @@ import (
 	"os"
 )
 
-const ()
-
 var (
 	Options       = credOption()
 	DefaultConfig = defaultConfig()
@@ -54,16 +52,24 @@ func (conf *TestConf) GetOptions() option.ClientOption {
 }
 
 func (conf *TestConf) ClientFromConfig(ctx context.Context) *firestore.Client {
-	/*client, err := firestore.NewClient(ctx, "test")
+	client, err := firestore.NewClient(ctx, "test")
 	if err != nil {
 		log.Fatalf("firebase.NewClient err: %v", err)
 	}
-	return client*/
-	return nil
+	return client
 }
 
 func (config *Conf) ClientFromConfig(ctx context.Context) *firestore.Client {
-	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsFile(os.Getenv("CREDS_LOCATION")))
+	projectID := os.Getenv("PROJECT_ID")
+	serviceAccountID := os.Getenv("SERVICE_ACCOUNT_ID")
+	storageBucket := os.Getenv("BUCKET_NAME")
+	app, err := firebase.NewApp(ctx, &firebase.Config{
+		AuthOverride:     nil,
+		DatabaseURL:      "",
+		ProjectID:        projectID,
+		ServiceAccountID: serviceAccountID,
+		StorageBucket:    storageBucket,
+	})
 	if err != nil {
 		log.Fatalln(err)
 	}

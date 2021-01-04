@@ -258,9 +258,7 @@ var Posts = &pageImpl{
 			}
 		}
 		body := htmlStr
-		fmt.Println("BODY \n %s", body)
 		formStr := ""
-
 		if authed {
 			formStr += "<div class=\"container\">" +
 				"<div class=\"post-container-form\">" +
@@ -317,10 +315,10 @@ func printInvites(invites []*invite.Invite, authed bool, short bool) string {
 	for pos, invite := range invites {
 		htmlStr += fmt.Sprintf("<div class=\"post-container\">"+
 			"<h1>invite %d</h1>"+
-			"<a href=\"https://www.kll.la/register/%s\">https://www.kll.la/register/%s</a>" +
+			"<a href=\"https://www.kll.la/register/%s\">https://www.kll.la/register/%s</a>"+
 			"<div class=\"post-container-author\">%s</div> "+
 			"<div class=\"post-container-date\">%s</div>"+
-			"</div>", pos+1, invite.InviteID,invite.InviteID,invite.CreatedBy, invite.ExpiryTime.Format("2006/01/02"))
+			"</div>", pos+1, invite.InviteID, invite.InviteID, invite.CreatedBy, invite.ExpiryTime.Format("2006/01/02"))
 	}
 	return htmlStr
 
@@ -420,7 +418,7 @@ var Register = &pageImpl{
 			"<h1>register:</h1>" +
 			"<input type=\"text\" placeholder=\"username\" id=\"username\" name=\"username\"></input>" +
 			"<input type=\"password\" placeholder=\"password\" id=\"password\" name=\"password\"></input>" +
-			"<input type=\"text\" hidden placeholder=\"\" id=\"invite\" name=\"invite\" value=\""+value+"\"></input>" +
+			"<input type=\"text\" hidden placeholder=\"\" id=\"invite\" name=\"invite\" value=\"" + value + "\"></input>" +
 			"<input type=\"submit\" value=\"register\"></input>" +
 			"</form>" +
 			"</div>"

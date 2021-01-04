@@ -9,7 +9,7 @@ import (
 )
 
 type Service interface {
-	CreateInvite(w http.ResponseWriter, r *http.Request, createdBy string)  (*Invite, error)
+	CreateInvite(w http.ResponseWriter, r *http.Request, createdBy string) (*Invite, error)
 	DeleteInvite(id string) error
 	GetInviteIfIDisValid(id string) (bool, *Invite)
 	GetAllInvitesCreatedBy(by string) []*Invite

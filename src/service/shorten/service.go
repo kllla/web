@@ -11,7 +11,7 @@ import (
 const domain = "kll.la/"
 
 type Service interface {
-	CreatedShortenedURL(w http.ResponseWriter, r *http.Request, createdBy string)  (*ShortenedURL, error)
+	CreatedShortenedURL(w http.ResponseWriter, r *http.Request, createdBy string) (*ShortenedURL, error)
 	GetUrlIfIDisValid(id string) (bool, *ShortenedURL)
 	GetAllShortenedURLsCreatedBy(by string) []*ShortenedURL
 }

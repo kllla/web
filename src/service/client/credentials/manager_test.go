@@ -89,7 +89,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestNewTestManager(t *testing.T) {
-	tm := NewTestManager()
+	tm := newTestManager()
 	defer tm.Close()
 
 	test.AssertNotNil(t, tm)
@@ -107,7 +107,7 @@ func TestNewCredentials(t *testing.T) {
 }
 
 func TestNewCredentialsFailureDuplicate(t *testing.T) {
-	tm := TestManager()
+	tm := newTestManager()
 	defer tm.Close()
 
 	creds := NewCredentials("test", "password", true)

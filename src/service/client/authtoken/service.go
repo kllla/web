@@ -34,7 +34,7 @@ type impl struct {
 }
 
 func (sh *impl) GetUsernameForSession(w http.ResponseWriter, r *http.Request) string {
-	fmt.Print(fmt.Sprintf("sh.activeSessions %v", sh.activeSessions), fmt.Sprintf("Getting Session Cookie for mck: %s vs ck: %s ", sh.cookieKey,  cookieKey))
+	fmt.Print(fmt.Sprintf("sh.activeSessions %v", sh.activeSessions), fmt.Sprintf("Getting Session Cookie for mck: %s vs ck: %s ", sh.cookieKey, cookieKey))
 	cookies, err := sh.cookieStore.Get(r, sh.cookieKey)
 	if err == nil {
 		if sesKey, cok := cookies.Values[cookieKey]; cok {
@@ -78,7 +78,7 @@ func (sh *impl) AuthenticateSession(w http.ResponseWriter, r *http.Request, cred
 	cookies, _ := sh.cookieStore.Get(r, sh.cookieKey)
 	sessionAuthToken := sh.createAuthToken()
 	authedSession := &sessionImpl{
-		username: creds.Username,
+		username:   creds.Username,
 		expiryTime: time.Now().Add(sh.defaultExpiry),
 		authToken:  sessionAuthToken,
 	}

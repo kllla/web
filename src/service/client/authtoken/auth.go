@@ -9,7 +9,7 @@ type session interface {
 
 type sessionImpl struct {
 	expiryTime time.Time
-	username string
+	username   string
 	authToken  string
 }
 
@@ -20,5 +20,3 @@ func (s *sessionImpl) IsExpired() bool {
 func (s *sessionImpl) GetUsername() string {
 	return s.username
 }
-
-

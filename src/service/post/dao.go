@@ -30,8 +30,7 @@ type daoImpl struct {
 
 func (dao *daoImpl) GetPostByID(id string) []*Post {
 	posts := make([]*Post, 0)
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(bucket).Where("ID", "==", id).Documents(ctx)
+	iter := dao.client.Collection(bucket).Where("ID", "==", id).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -39,9 +38,8 @@ func (dao *daoImpl) GetPostByID(id string) []*Post {
 		}
 		if err != nil {
 			log.Fatalf("Failed to iterate: %v", err)
-			cancel()
 		}
-		post := docToPost(err, doc, cancel)
+		post := docToPost(err, doc)
 		posts = append(posts, post)
 	}
 	return posts
@@ -61,8 +59,7 @@ func NewDao(config config.Config) Dao {
 // GetPosts gets all posts
 func (dao *daoImpl) GetPosts() []*Post {
 	posts := make([]*Post, 0)
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(bucket).OrderBy("Date", firestore.Desc).Documents(ctx)
+	iter := dao.client.Collection(bucket).OrderBy("Date", firestore.Desc).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -70,17 +67,15 @@ func (dao *daoImpl) GetPosts() []*Post {
 		}
 		if err != nil {
 			log.Fatalf("Failed to iterate: %v", err)
-			cancel()
 		}
-		post := docToPost(err, doc, cancel)
+		post := docToPost(err, doc)
 		posts = append(posts, post)
 	}
 	return posts
 }
 
 func (dao *daoImpl) DeletePostById(id string) bool {
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(bucket).Where("ID", "==", id).Documents(ctx)
+	iter := dao.client.Collection(bucket).Where("ID", "==", id).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -88,12 +83,10 @@ func (dao *daoImpl) DeletePostById(id string) bool {
 		}
 		if err != nil {
 			log.Fatalf("Failed to iterate: %v", err)
-			cancel()
 		}
-		_, err = doc.Ref.Delete(ctx)
+		_, err = doc.Ref.Delete(dao.ctx)
 		if err != nil {
 			log.Fatalf("Failed to delete: %v", err)
-			cancel()
 			return false
 		}
 	}
@@ -103,8 +96,7 @@ func (dao *daoImpl) DeletePostById(id string) bool {
 // GetPostsForUsername gets all posts for the username
 func (dao *daoImpl) GetPostsForUsername(username string) []*Post {
 	posts := make([]*Post, 0)
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(bucket).Where("Author", "==", username).OrderBy("Date", firestore.Desc).Documents(ctx)
+	iter := dao.client.Collection(bucket).Where("Author", "==", username).OrderBy("Date", firestore.Desc).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -112,9 +104,8 @@ func (dao *daoImpl) GetPostsForUsername(username string) []*Post {
 		}
 		if err != nil {
 			log.Fatalf("Failed to iterate: %v", err)
-			cancel()
 		}
-		post := docToPost(err, doc, cancel)
+		post := docToPost(err, doc)
 		posts = append(posts, post)
 	}
 	return posts
@@ -123,8 +114,7 @@ func (dao *daoImpl) GetPostsForUsername(username string) []*Post {
 // GetHiddenPosts gets all hidden posts
 func (dao *daoImpl) GetHiddenPosts() []*Post {
 	posts := make([]*Post, 0)
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(bucket).Where("Public", "==", "false").OrderBy("Date", firestore.Desc).Documents(ctx)
+	iter := dao.client.Collection(bucket).Where("Public", "==", "false").OrderBy("Date", firestore.Desc).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -132,9 +122,8 @@ func (dao *daoImpl) GetHiddenPosts() []*Post {
 		}
 		if err != nil {
 			log.Fatalf("Failed to iterate: %v", err)
-			cancel()
 		}
-		post := docToPost(err, doc, cancel)
+		post := docToPost(err, doc)
 		posts = append(posts, post)
 	}
 	return posts
@@ -143,8 +132,7 @@ func (dao *daoImpl) GetHiddenPosts() []*Post {
 // GetPublicPosts gets all posts marked public
 func (dao *daoImpl) GetPublicPosts() []*Post {
 	posts := make([]*Post, 0)
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(bucket).Where("Public", "==", true).OrderBy("Date", firestore.Desc).Documents(ctx)
+	iter := dao.client.Collection(bucket).Where("Public", "==", true).OrderBy("Date", firestore.Desc).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -152,20 +140,17 @@ func (dao *daoImpl) GetPublicPosts() []*Post {
 		}
 		if err != nil {
 			log.Fatalf("Failed to iterate: %v", err)
-			cancel()
 		}
-		post := docToPost(err, doc, cancel)
+		post := docToPost(err, doc)
 		posts = append(posts, post)
 	}
 	return posts
 }
 
 func (dao *daoImpl) CreatePost(post *Post) {
-	ctx, cancel := context.WithCancel(dao.ctx)
-	_, _, err := dao.client.Collection(bucket).Add(ctx, post)
+	_, _, err := dao.client.Collection(bucket).Add(dao.ctx, post)
 	if err != nil {
 		log.Fatalf("Failed adding posting: %v", err)
-		cancel()
 	}
 }
 
@@ -178,11 +163,10 @@ func (dao *daoImpl) Close() error {
 }
 
 //docToPost Json marshals firestore doc to Post struct
-func docToPost(err error, doc *firestore.DocumentSnapshot, cancel context.CancelFunc) *Post {
+func docToPost(err error, doc *firestore.DocumentSnapshot) *Post {
 	md, err := json.Marshal(doc.Data())
 	if err != nil {
 		log.Fatalf("Failed to marshal data: %v", err)
-		cancel()
 	}
 	var post = &Post{}
 	json.Unmarshal(md, post)

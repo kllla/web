@@ -14,7 +14,7 @@ func AssertTrue(t *testing.T, val bool) {
 	}
 }
 
-func AssertFalse(t *testing.T, val bool)  {
+func AssertFalse(t *testing.T, val bool) {
 	if val != false {
 		t.Errorf("failed assert false")
 	}
@@ -32,7 +32,7 @@ func AssertNil(t *testing.T, val interface{}) {
 	}
 }
 
-func AssertNotNil(t *testing.T, val interface{})  {
+func AssertNotNil(t *testing.T, val interface{}) {
 	if val == nil {
 		t.Errorf("failed assert not nil")
 	}

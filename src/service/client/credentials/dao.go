@@ -37,39 +37,36 @@ func (dao *daoImpl) DeleteCredentials(credentials *Credentials) error {
 func NewDao(config config.Config) Dao {
 	ctx := context.Background()
 	d := &daoImpl{
-		ctx:    ctx,
+		ctx: ctx,
 	}
 	d.SetClientFromConfig(config)
 	return d
 }
 
 func (dao *daoImpl) CreateCredentials(credentials *Credentials) error {
-	ctx, cancel := context.WithCancel(dao.ctx)
 	existingCredentials := dao.GetCredentialsForUsername(credentials.Username)
 	if len(existingCredentials) > 0 {
 		return fmt.Errorf("username %s is unavailable", credentials.Username)
 	}
-	_, _, err := dao.client.Collection(credentialsBucket).Add(ctx, credentials.ToNoPassCredentials())
+	_, _, err := dao.client.Collection(credentialsBucket).Add(dao.ctx, credentials.ToNoPassCredentials())
 	if err != nil {
 		log.Fatalf("Failed creating credentials: %s", err)
-		cancel()
 	}
 	return nil
 }
 
 // GetCredentialsForUsername gets NoPassCredentials from the credentials bucket
 func (dao *daoImpl) DeleteCredentialsForUsername(username string) error {
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(credentialsBucket).Where("Username", "==", username).Documents(ctx)
+	iter := dao.client.Collection(credentialsBucket).Where("Username", "==", username).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err != nil {
 			if err == iterator.Done {
 				break
 			}
-			failToIterate(err, cancel)
+			failToIterate(err)
 		}
-		_, err = doc.Ref.Delete(ctx)
+		_, err = doc.Ref.Delete(dao.ctx)
 		return err
 	}
 	return fmt.Errorf("no credentials found for username %s", username)
@@ -78,54 +75,50 @@ func (dao *daoImpl) DeleteCredentialsForUsername(username string) error {
 // GetCredentialsForUsername gets NoPassCredentials from the credentials bucket
 func (dao *daoImpl) GetCredentialsForUsername(username string) []*NoPassCredentials {
 	credentials := make([]*NoPassCredentials, 0)
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(credentialsBucket).Where("Username", "==", username).Documents(ctx)
+	iter := dao.client.Collection(credentialsBucket).Where("Username", "==", username).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err != nil {
 			if err == iterator.Done {
 				break
 			}
-			failToIterate(err, cancel)
+			failToIterate(err)
 		}
-		cred := docToCredentials(err, doc, cancel)
+		cred := docToCredentials(err, doc)
 		credentials = append(credentials, cred)
 	}
 	return credentials
 }
 
-func failToIterate(err error, cancel context.CancelFunc) {
+func failToIterate(err error) {
 	if err != nil {
 		log.Fatalf("Failed to iterate: %v", err)
-		cancel()
 	}
 }
 
 // GetAllCredentials gets all posts from
 func (dao *daoImpl) GetAllCredentials() []*NoPassCredentials {
 	credentials := make([]*NoPassCredentials, 0)
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(credentialsBucket).Documents(ctx)
+	iter := dao.client.Collection(credentialsBucket).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err != nil {
 			if err == iterator.Done {
 				break
 			}
-			failToIterate(err, cancel)
+			failToIterate(err)
 		}
-		post := docToCredentials(err, doc, cancel)
+		post := docToCredentials(err, doc)
 		credentials = append(credentials, post)
 	}
 	return credentials
 }
 
 //docToCredentials Json marshals firestore doc to Post struct
-func docToCredentials(err error, doc *firestore.DocumentSnapshot, cancel context.CancelFunc) *NoPassCredentials {
+func docToCredentials(err error, doc *firestore.DocumentSnapshot) *NoPassCredentials {
 	md, err := json.Marshal(doc.Data())
 	if err != nil {
 		log.Fatalf("Failed to marshal data: %v", err)
-		cancel()
 	}
 	var credentials = &NoPassCredentials{}
 	json.Unmarshal(md, credentials)

@@ -12,7 +12,7 @@ func initASCII() (*figlet4go.AsciiRender, *figlet4go.RenderOptions) {
 	// Adding the colours to RenderOptions
 	options := figlet4go.NewRenderOptions()
 	options.FontName = "ansiregular"
-	bucket := sao.NewSao()
+	bucket := sao.New()
 	bin := bucket.GetStaticFiles("ansiregular.flf")
 	ascii.LoadBindataFont(bin, "ansiregular")
 	return ascii, options

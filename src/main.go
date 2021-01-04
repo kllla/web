@@ -151,19 +151,18 @@ func postsHandler(w http.ResponseWriter, r *http.Request) {
 				Indata:        intPosts,
 			})
 			return
-		} else {
-			if pathIDok && (len(postByID) == 1 && postByID[0].Public) {
-				renderer.RenderPageWithOptions(w, render.Posts, &render.PageRenderOptions{
-					Banner:        "",
-					AuthedNavBar:  isAuthForPosting,
-					AuthedContent: false,
-					Indata:        post.RenderWrap(postByID),
-				})
-				return
-			}
-			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		}
+		if pathIDok && (len(postByID) == 1 && postByID[0].Public) {
+			renderer.RenderPageWithOptions(w, render.Posts, &render.PageRenderOptions{
+				Banner:        "",
+				AuthedNavBar:  isAuthForPosting,
+				AuthedContent: false,
+				Indata:        post.RenderWrap(postByID),
+			})
 			return
 		}
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
 	case http.MethodPost:
 		if isAuthForPosting {
 			formDataPost := postSvc.GetPostFromFormData(w, r, author)
@@ -254,18 +253,17 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		if inviteID == "" {
 			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 			return
-		} else {
-			if ok, _ := inviteSvc.GetInviteIfIDisValid(inviteID); ok {
-				var inviteIDs []interface{}
-				inviteIDs = append(inviteIDs, inviteID)
-				renderer.RenderPageWithOptions(w, render.Register, &render.PageRenderOptions{
-					Banner:        "",
-					AuthedNavBar:  false,
-					AuthedContent: false,
-					Indata:        inviteIDs,
-				})
-				return
-			}
+		} else
+		if ok, _ := inviteSvc.GetInviteIfIDisValid(inviteID); ok {
+			var inviteIDs []interface{}
+			inviteIDs = append(inviteIDs, inviteID)
+			renderer.RenderPageWithOptions(w, render.Register, &render.PageRenderOptions{
+				Banner:        "",
+				AuthedNavBar:  false,
+				AuthedContent: false,
+				Indata:        inviteIDs,
+			})
+			return
 		}
 	case http.MethodPost:
 		if clientSvc.CreateCredentials(w, r) {

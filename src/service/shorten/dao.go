@@ -28,8 +28,7 @@ func NewDao(config config.Config) *Dao {
 // getPosts gets all posts from
 func (dao *Dao) GetShortenedURLS() []*ShortenedURL {
 	posts := make([]*ShortenedURL, 0)
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(bucket).OrderBy("Date", firestore.Desc).Documents(ctx)
+	iter := dao.client.Collection(bucket).OrderBy("Date", firestore.Desc).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -37,20 +36,18 @@ func (dao *Dao) GetShortenedURLS() []*ShortenedURL {
 		}
 		if err != nil {
 			log.Fatalf("Failed to iterate: %v", err)
-			cancel()
 		}
-		post := docToShortenedURL(err, doc, cancel)
+		post := docToShortenedURL(err, doc)
 		posts = append(posts, post)
 	}
 	return posts
 }
 
 //docToShortenedURL Json marshals firestore doc to Post struct
-func docToShortenedURL(err error, doc *firestore.DocumentSnapshot, cancel context.CancelFunc) *ShortenedURL {
+func docToShortenedURL(err error, doc *firestore.DocumentSnapshot) *ShortenedURL {
 	md, err := json.Marshal(doc.Data())
 	if err != nil {
 		log.Fatalf("Failed to marshal data: %v", err)
-		cancel()
 	}
 	var post = &ShortenedURL{}
 	json.Unmarshal(md, post)
@@ -71,8 +68,7 @@ func (dao *Dao) Close() error {
 
 func (dao *Dao) GetShortenedURLsCreatedBy(createdBy string) []*ShortenedURL {
 	ShortenedURLS := make([]*ShortenedURL, 0)
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(bucket).Where("CreatedBy", "==", createdBy).Documents(ctx)
+	iter := dao.client.Collection(bucket).Where("CreatedBy", "==", createdBy).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -80,9 +76,8 @@ func (dao *Dao) GetShortenedURLsCreatedBy(createdBy string) []*ShortenedURL {
 		}
 		if err != nil {
 			log.Fatalf("Failed to iterate: %v", err)
-			cancel()
 		}
-		ShortenedURL := docToShortenedURL(err, doc, cancel)
+		ShortenedURL := docToShortenedURL(err, doc)
 		ShortenedURLS = append(ShortenedURLS, ShortenedURL)
 	}
 	return ShortenedURLS
@@ -90,8 +85,7 @@ func (dao *Dao) GetShortenedURLsCreatedBy(createdBy string) []*ShortenedURL {
 
 func (dao *Dao) GetShortenedURLForID(shortenedID string) []*ShortenedURL {
 	posts := make([]*ShortenedURL, 0)
-	ctx, cancel := context.WithCancel(dao.ctx)
-	iter := dao.client.Collection(bucket).Where("ShortenedID", "==", shortenedID).Documents(ctx)
+	iter := dao.client.Collection(bucket).Where("ShortenedID", "==", shortenedID).Documents(dao.ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -99,9 +93,8 @@ func (dao *Dao) GetShortenedURLForID(shortenedID string) []*ShortenedURL {
 		}
 		if err != nil {
 			log.Fatalf("Failed to iterate: %v", err)
-			cancel()
 		}
-		post := docToShortenedURL(err, doc, cancel)
+		post := docToShortenedURL(err, doc)
 		posts = append(posts, post)
 	}
 	return posts
