@@ -12,7 +12,6 @@ import (
 // independent of their bucket
 type Sao interface {
 	GetStaticFiles(object string) []byte
-	Close() error
 }
 
 type saoImpl struct {
