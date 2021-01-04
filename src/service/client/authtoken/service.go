@@ -39,7 +39,7 @@ func (sh *impl) GetUsernameForSession(w http.ResponseWriter, r *http.Request) st
 	if err == nil {
 		if sesKey, cok := cookies.Values[cookieKey]; cok {
 			if ses, ok := sh.activeSessions[fmt.Sprintf("%v", sesKey)]; ok {
-				fmt.Printf("\nSession: %s %t ", ses.GetUsername(), ses.IsExpired())
+
 				if !ses.(session).IsExpired() {
 					return ses.GetUsername()
 				}

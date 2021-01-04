@@ -27,7 +27,7 @@ func (s *impl) GetURLFromFormData(w http.ResponseWriter, r *http.Request) string
 		return ""
 	}
 	longURL := r.FormValue("longURL")
-	fmt.Printf("LONG URL %s", longURL)
+
 	return longURL
 }
 

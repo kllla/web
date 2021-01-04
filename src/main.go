@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/kllla/web/src/service/client"
 	"github.com/kllla/web/src/service/invite"
 	"github.com/kllla/web/src/service/post"
@@ -127,10 +126,20 @@ func postsHandler(w http.ResponseWriter, r *http.Request) {
 	banner := ascii.RenderString(author)
 	switch r.Method {
 	case http.MethodGet:
-		if isAuthForPosting && pathIDok {
-			action := postSvc.GetActionFromFormData(w, r)
-			if action == "delete" {
-				postSvc.DeletePost(postByID[0].ID)
+		if isAuthForPosting {
+			if pathIDok {
+				action := postSvc.GetActionFromFormData(w, r)
+				if action == "delete" {
+					postSvc.DeletePost(postByID[0].ID)
+				} else {
+					renderer.RenderPageWithOptions(w, render.Posts, &render.PageRenderOptions{
+						Banner:        "",
+						AuthedNavBar:  isAuthForPosting,
+						AuthedContent: false,
+						Indata:        post.RenderWrap(postByID),
+					})
+					return
+				}
 			}
 			userPosts := postSvc.GetAllPostsForUsername(author)
 			var intPosts []interface{}
@@ -262,7 +271,6 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		if clientSvc.CreateCredentials(w, r) {
 			r.ParseForm()
 			inviteID := r.FormValue("invite")
-			fmt.Printf("DELETING id %s", inviteID)
 			inviteSvc.DeleteInvite(inviteID)
 			renderer.RenderPageWithOptions(w, render.Login, &render.PageRenderOptions{
 				Banner:        "",

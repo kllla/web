@@ -258,6 +258,7 @@ var Posts = &pageImpl{
 			}
 		}
 		body := htmlStr
+		fmt.Println("BODY \n %s", body)
 		formStr := ""
 
 		if authed {
@@ -311,7 +312,7 @@ func processIndata(authed bool, short bool, htmlStr string, inData ...interface{
 }
 
 func printInvites(invites []*invite.Invite, authed bool, short bool) string {
-	fmt.Printf("INVITES { %s }", invites)
+
 	htmlStr := ""
 	for pos, invite := range invites {
 		htmlStr += fmt.Sprintf("<div class=\"post-container\">"+

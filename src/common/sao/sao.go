@@ -3,6 +3,7 @@ package sao
 import (
 	"cloud.google.com/go/storage"
 	"context"
+	"google.golang.org/api/option"
 	"io/ioutil"
 	"log"
 	"os"
@@ -24,7 +25,7 @@ type Config struct {
 
 func NewSao() Sao {
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithCredentialsFile(os.Getenv("CREDS_LOCATION")))
 	if err != nil {
 		log.Fatalln(err)
 	}

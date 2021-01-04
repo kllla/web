@@ -31,7 +31,7 @@ func NewService() Service {
 
 func (h *impl) GetSessionUsername(w http.ResponseWriter, r *http.Request) string {
 	if username := h.authTokenManager.GetUsernameForSession(w, r); username != "" {
-		fmt.Printf("\nFound session username %s", username)
+
 		return username
 	}
 	return ""
@@ -73,11 +73,11 @@ func (h *impl) AuthenticationCheck(w http.ResponseWriter, r *http.Request) bool 
 
 func (h impl) VerifyCredentialsAndAuthenticate(w http.ResponseWriter, r *http.Request) bool {
 	creds := h.getCredentialsFromFormData(w, r)
-	fmt.Printf("\nForm Creds %v", creds)
+
 	if h.credentialsManager.IsCredentialsValid(creds) {
-		fmt.Printf("\n Valid Creds")
+
 		if h.authTokenManager.AuthenticateSession(w, r, creds) {
-			fmt.Printf("\nSession authed")
+
 			return true
 		}
 	}
@@ -91,9 +91,9 @@ func (h impl) getCredentialsFromFormData(w http.ResponseWriter, r *http.Request)
 	}
 	username := r.FormValue("username")
 	password := r.FormValue("password")
-	fmt.Printf("%t Getting %s : %s", ok, username, password)
+
 	creds := credentials.NewCredentials(username, password, ok)
-	fmt.Printf("Creds %v", creds)
+
 	if creds == nil {
 		http.Error(w, "failed basic auth form", http.StatusBadRequest)
 	}

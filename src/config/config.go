@@ -63,13 +63,7 @@ func (conf *TestConf) ClientFromConfig(ctx context.Context) *firestore.Client {
 }
 
 func (config *Conf) ClientFromConfig(ctx context.Context) *firestore.Client {
-	app, err := firebase.NewApp(ctx, &firebase.Config{
-		AuthOverride:     nil,
-		DatabaseURL:      "",
-		ProjectID:        "infra-person",
-		ServiceAccountID: "105637127689182478722",
-		StorageBucket:    "infra-person.appspot.com",
-	})
+	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsFile(os.Getenv("CREDS_LOCATION")))
 	if err != nil {
 		log.Fatalln(err)
 	}
