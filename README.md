@@ -1,7 +1,11 @@
 # kll.la/web
 
-This is a simple suite of web services for running an invite only posting community with 
-some shared services among users. 
+This is a simple suite of web services for running an invitation only posting community with 
+shared services among users. All hosted on Google Cloud Platform using Firebase and Storage Buckets. 
+Authentication his handled in app with bcrypt salted passwords while Authentication is via a bearer session token.
+All the html rendered server side. 
+This was to have 0 reliance on javascript not for any inherent dislike, but I wanted the site to be able to be run over TOR 
+where there is almost a defacto standard of no client side javascript.
 
 - multi user 
 - bearer auth sessions
@@ -12,4 +16,10 @@ some shared services among users.
 ## prerequisites
 
 - google GCP account
- 
+
+### env vars
+
+these are required to successfully start ther service.
+ - BUCKET_NAME
+ - SERVICE_ACCOUNT_ID
+ - PROJECT_ID 
